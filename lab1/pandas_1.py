@@ -2,7 +2,6 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
 pd.set_option('display.max_columns', None)
 
 class_mapping = {
@@ -10,6 +9,8 @@ class_mapping = {
     1: 'Iris-versicolor',
     2: 'Iris-virginica'
 }
+
+
 def upload_df(file_name, delete_first=True):
     df = pd.read_csv(file_name, delimiter=',')
     if delete_first:
@@ -17,8 +18,10 @@ def upload_df(file_name, delete_first=True):
     else:
         return df
 
+
 def save_df(df, file_name):
     df.to_csv(file_name, index=False)
+
 
 def print_df_data(df):
     print("\n============== head ==============")
@@ -33,12 +36,6 @@ def replace_df_column(df, column, class_mapping):
     print("\n============= replaced  ===============")
     print(df_copy.head())
     return df_copy
-
-
-
-
-
-
 
 
 def show_pair_grid(df, hue):
@@ -69,10 +66,10 @@ def show_histplot(df, hue, bins_in_histogram=15, row=2, column=2, multiple='laye
 
 
 if __name__ == '__main__':
-    iris_df = upload_df('../data/iris.csv')
+    iris_df = upload_df('../data/lab1/iris.csv')
     print_df_data(iris_df)
     iris_df = replace_df_column(iris_df, 'target', class_mapping)
-    save_df(iris_df, '../data/replaced_target_iris.csv')
+    save_df(iris_df, '../data/lab1/replaced_target_iris.csv')
     show_pair_grid(iris_df, 'target')
     for i in range(5, 35, 5):
         show_histplot(iris_df, 'target', i)

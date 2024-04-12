@@ -30,6 +30,6 @@ def print_a_description(a):
 
 
 if __name__ == '__main__':
-    iris_a = get_a('../data/iris.csv')
+    iris_a = get_a('../data/lab1/iris.csv')
     print_a_head(iris_a)
     print_a_description(iris_a)

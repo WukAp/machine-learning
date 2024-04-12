@@ -91,12 +91,12 @@ def get_filtered_df(df):
 
 columns = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
 if __name__ == '__main__':
-    iris_df = upload_df('../data/replaced_target_iris.csv', delete_first=False)
+    iris_df = upload_df('../data/lab1/replaced_target_iris.csv', delete_first=False)
     iris_df_labels = iris_df['target']
 
     print_encoders(iris_df_labels);
 
-    iris_a_features = upload_df('../data/replaced_target_iris.csv', delete_first=False).iloc[:, 0:4].to_numpy()
+    iris_a_features = upload_df('../data/lab1/replaced_target_iris.csv', delete_first=False).iloc[:, 0:4].to_numpy()
     show_scalers_sklearn(iris_a_features, columns)
     show_my_scalers(iris_a_features, columns)
     print(get_filtered_df(iris_df))
