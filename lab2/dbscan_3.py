@@ -29,4 +29,4 @@ if __name__ == '__main__':
 
     show_clusters(first_df, name="======== lab2_blobs ========", eps=0.11, min_samples=5)
     show_clusters(second_df, name="======== lab2_checker ========", eps=0.1, min_samples=30)
-    show_clusters(third_df, name="======== lab2_noisymoons ========", eps=0.112, min_samples=15)
+    show_clusters(third_df, name="======== lab2_noisymoons ========", eps=0.1, min_samples=10)

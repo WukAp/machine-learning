@@ -3,14 +3,14 @@ from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-
+import scipy.cluster.hierarchy as shc
 from lab1.dim_reduction_5 import get_reduced_dimensionality_df
 from lab1.pandas_1 import upload_df, show_pair_grid
 import seaborn as sns
 
 from lab2.prepearing_1 import scale
 
-from lab2.k_means_2 import show_elbow_method, show_silhouette_method
+from lab2.k_means_2 import show_elbow_method, show_silhouette_method, show_clusters
 
 
 def k_mean_clusterize(df, clusters):
@@ -31,52 +31,95 @@ def ag_clusterize(df, clusters=5, linkage='ward'):
     return ag_clust
 
 
-def show_bscan_clusterize(df, eps, min_samples):
-    cluster_df = df
-    cluster_df['cluster'] = dbscan_clusterize(df, eps, min_samples)
-    print(cluster_df)
-    show_pair_grid(cluster_df, 'cluster')  # долго работает
+def get_dim2_plot(df, cluster):
+    df_dim2 = get_reduced_dimensionality_df(df, PCA(n_components=2), ['x', 'y'])
+    df_dim2['cluster'] = cluster
+
+    print(df)
+    sns.scatterplot(
+        x='x',
+        y='y',
+        data=df_dim2,
+        hue='cluster',
+        legend=True,
+        palette='tab10'
+    )
+    plt.show()
+    df_dim2 = get_reduced_dimensionality_df(df, TSNE(n_components=2), ['x', 'y'])
+    df_dim2['cluster'] = cluster
+
+    print(df)
+    sns.scatterplot(
+        x='x',
+        y='y',
+        data=df_dim2,
+        hue='cluster',
+        legend=True,
+        palette='tab10'
+    )
+    plt.show()
 
 
-def show_k_mean_clusterize(df, cluster):
-    cluster_df = df
-    cluster_df['cluster'] = k_mean_clusterize(df, clusters=cluster)
-    print(cluster_df)
-    show_pair_grid(cluster_df, 'cluster')  # долго работает
+def show_dbscan_clusterize(df, eps, min_samples, cluster_name):
+    cluster_df = df.copy()
+    clusters_column = dbscan_clusterize(df, eps, min_samples)
+    cluster_df['cluster'] = clusters_column
+
+    get_dim2_plot(df, clusters_column)
+    # show_boxplot(cluster_df, cluster_name)
 
 
-def show_ag_clusterize(df, cluster):
-    cluster_df = df
-    cluster_df['cluster'] = ag_clusterize(df, clusters=cluster)
-    print(cluster_df)
-    show_pair_grid(cluster_df, 'cluster')
+def show_k_mean_clusterize(df, cluster, cluster_name):
+    cluster_df = df.copy()
+    clusters_column = k_mean_clusterize(df, clusters=cluster)
+    cluster_df['cluster'] = clusters_column
+    get_dim2_plot(df, clusters_column)
+    #show_pair_grid(cluster_df, 'cluster')
+    show_boxplot(cluster_df, cluster_name)
+
+
+def show_ag_clusterize(df, cluster_name, cluster=5, linkage = 'ward'):
+    cluster_df = df.copy()
+
+    clusters_column = ag_clusterize(df,  cluster, linkage=linkage)
+    cluster_df['cluster'] = clusters_column
+    get_dim2_plot(df, clusters_column)
+    shc.dendrogram(shc.linkage(df, method=linkage))
+    plt.show()
+    #show_boxplot(cluster_df, cluster_name)
+    #show_pair_grid(cluster_df, 'cluster')
+    for i in range(0, 6):
+        tmp_df = cluster_df.loc[(cluster_df['cluster'] == i)]
+        print("claster == ",  i)
+        print(tmp_df.describe())
+    print(cluster_df.describe())
+
+
+
+def show_boxplot(norm_pd, column):
+    for i in column:
+        sns.violinplot(norm_pd, x=i, hue='cluster', palette='tab10', )
+        plt.title = i
+        plt.show()
 
 
 if __name__ == '__main__':
     columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar',
                'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density',
-               'pH', 'sulphates', 'alcohol', 'q']
+               'pH', 'sulphates', 'alcohol', 'quality']
 
     df_uploaded = scale(upload_df('../data/lab2/lab2_winequality_red.csv', delete_first=False), columns)
+    #show_pair_grid(df_uploaded, hue='quality')
     df_uploaded.drop(df_uploaded.columns[[-1]], axis=1, inplace=True)
 
-    df_dim2 = get_reduced_dimensionality_df(df_uploaded, TSNE(n_components=2), ['x', 'y'])
-    # show_elbow_method(df_uploaded, y=15)  # 10-12
-    # show_silhouette_method(df_uploaded, y=15) #10
+    #show_elbow_method(df_uploaded, y=10)  # 10-12
+    #show_silhouette_method(df_uploaded, y=15) #10
+    columns = columns[0: -1]
 
-    # show_k_mean_clusterize(df_uploaded, 10)
-
-    # show_bscan_clusterize(df_uploaded, 0.1, 12)
-    # show_ag_clusterize(df_uploaded, 10)
-
-    # df_dim2['cluster'] = k_mean_clusterize(df_uploaded, clusters=18)
-    # sns.scatterplot(df_dim2, x='x', y='y', hue='cluster', palette='tab10')
-    # plt.show()
-
-    df_dim2['cluster'] = dbscan_clusterize(df_uploaded, 0.17, 5)
-    sns.scatterplot(df_dim2, x='x', y='y', hue='cluster', palette='tab10')
-    plt.show()
-
-    df_dim2['cluster'] = ag_clusterize(df_uploaded, clusters=10)
-    sns.scatterplot(df_dim2, x='x', y='y', hue='cluster', palette='tab10')
-    plt.show()
+    #show_k_mean_clusterize(df_uploaded, 6, columns)  # норм
+    #show_k_mean_clusterize(df_uploaded, 4, columns)  # норм
+    #show_k_mean_clusterize(df_uploaded, 8, columns)  # норм
+    show_ag_clusterize(df_uploaded,  columns, 6)
+    #show_ag_clusterize(df_uploaded, 7, columns)
+    #show_ag_clusterize(df_uploaded, 5, columns)
+    #show_dbscan_clusterize(df_uploaded, 0.2, 3, columns)

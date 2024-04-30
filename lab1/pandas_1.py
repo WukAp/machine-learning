@@ -40,12 +40,11 @@ def replace_df_column(df, column, class_mapping):
 
 def show_pair_grid(df, hue):
     sns.set_theme(style="white")
-    g = sns.PairGrid(df, diag_sharey=False, hue=hue)
+    g = sns.PairGrid(df, diag_sharey=False, hue=hue, palette='tab10')
     g.map_upper(sns.scatterplot, s=15)
     g.map_lower(sns.kdeplot)
     g.map_diag(sns.kdeplot)
     g.add_legend()
-    sns.set_palette("Set1")
     plt.show()
 
 

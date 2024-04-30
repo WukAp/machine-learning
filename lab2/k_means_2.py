@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, AgglomerativeClustering
 import seaborn as sns
 
 from lab2.prepearing_1 import get_first_df, get_second_df, get_third_df, scale
@@ -26,7 +26,7 @@ def show_elbow_method(df, y=15):
 def show_silhouette_method(df, y=15):
     sil_list = []
     for i in range(1, y):
-        temp_km = KMeans(i + 1, n_init=5)
+        temp_km = KMeans(n_clusters=i+1,  n_init=5)
         temp_clust = temp_km.fit_predict(df)
         sil_list.append(silhouette_score(df, temp_clust))
 
@@ -89,12 +89,15 @@ def clusterize(df, clusters):
 
 
 def show_clusters(df, clusters, name="===================="):
-    print(name)
     norm_pd, norm_km = clusterize(df, clusters)
     show_scatterplot(norm_pd)
     show_voronoi_diagram(df.to_numpy(), norm_km)
     show_boxplot(norm_pd)
-    print(norm_pd.describe())
+    print(name)
+    for i in range(clusters):
+        tmp_df = norm_pd.loc[(norm_pd['cluster'] == i)]
+        print("claster == ",  i)
+        print(tmp_df.describe())
 
 
 if __name__ == '__main__':
@@ -102,13 +105,7 @@ if __name__ == '__main__':
     second_df = scale(get_second_df(), columns=['x', 'y'])
     third_df = scale(get_third_df(), columns=['x', 'y'])
 
-    # show_elbow_method(first_df)  # 3-5
-    # show_elbow_method(second_df)  # 4-5
-    # show_elbow_method(third_df)  # 6-9
 
-    # show_silhouette_method(first_df)  # 5
-    # show_silhouette_method(second_df)  # 5
-    # show_silhouette_method(third_df)  # 8, 10
 
     show_clusters(first_df, 5, "======== lab2_blobs ========")
     show_clusters(second_df, 5, "======== lab2_checker ========")
