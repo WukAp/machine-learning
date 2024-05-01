@@ -101,9 +101,9 @@ def show_clusters(df, clusters, name="===================="):
 
 
 if __name__ == '__main__':
-    first_df = scale(get_first_df(), columns=['x', 'y'])
-    second_df = scale(get_second_df(), columns=['x', 'y'])
-    third_df = scale(get_third_df(), columns=['x', 'y'])
+    first_df = scale(get_first_df())
+    second_df = scale(get_second_df())
+    third_df = scale(get_third_df())
 
 
 

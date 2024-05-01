@@ -23,7 +23,8 @@ def show_scatterplot(df):
     plt.show()
 
 
-def scale(df, columns):
+def scale(df):
+    columns = df.columns.tolist()
     arr = df.to_numpy()
     scaler = MinMaxScaler()
     scaler.fit(arr)
@@ -37,7 +38,7 @@ def show_all(df, name):
     print_df_data(df)
     show_scatterplot(df)
 
-    df = scale(df, ['x', 'y'])
+    df = scale(df)
     show_scatterplot(df)
 
 

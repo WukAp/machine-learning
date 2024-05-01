@@ -108,7 +108,7 @@ if __name__ == '__main__':
                'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density',
                'pH', 'sulphates', 'alcohol', 'quality']
 
-    df_uploaded = scale(upload_df('../data/lab2/lab2_winequality_red.csv', delete_first=False), columns)
+    df_uploaded = scale(upload_df('../data/lab2/lab2_winequality_red.csv', delete_first=False))
     #show_pair_grid(df_uploaded, hue='quality')
     df_uploaded.drop(df_uploaded.columns[[-1]], axis=1, inplace=True)
 

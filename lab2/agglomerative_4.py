@@ -28,9 +28,9 @@ def show_clusters(df, clusters=5, linkage='average', name="===================="
 
 
 if __name__ == '__main__':
-    first_df = scale(get_first_df(), columns=['x', 'y'])
-    second_df = scale(get_second_df(), columns=['x', 'y'])
-    third_df = scale(get_third_df(), columns=['x', 'y'])
+    first_df = scale(get_first_df())
+    second_df = scale(get_second_df())
+    third_df = scale(get_third_df())
 
     show_clusters(first_df, name="======== lab2_blobs ========", clusters=5, linkage='ward')
     show_clusters(first_df, name="======== lab2_blobs ========", clusters=5, linkage='average')

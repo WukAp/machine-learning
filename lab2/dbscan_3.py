@@ -23,9 +23,9 @@ def show_clusters(df, eps, min_samples, name="===================="):
 
 
 if __name__ == '__main__':
-    first_df = scale(get_first_df(),columns=['x', 'y'])
-    second_df = scale(get_second_df(), columns=['x', 'y'])
-    third_df = scale(get_third_df(), columns=['x', 'y'])
+    first_df = scale(get_first_df())
+    second_df = scale(get_second_df())
+    third_df = scale(get_third_df())
 
     show_clusters(first_df, name="======== lab2_blobs ========", eps=0.11, min_samples=5)
     show_clusters(second_df, name="======== lab2_checker ========", eps=0.1, min_samples=30)
