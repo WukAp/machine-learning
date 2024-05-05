@@ -32,7 +32,7 @@ def print_df_data(df):
 
 def replace_df_column(df, column, class_mapping):
     df_copy = df.copy(deep=True)
-    df_copy[column] = df_copy['target'].replace(class_mapping)
+    df_copy[column] = df_copy[column].replace(class_mapping)
     print("\n============= replaced  ===============")
     print(df_copy.head())
     return df_copy
