@@ -1,11 +1,11 @@
 from matplotlib import pyplot as plt
 from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.neighbors import KNeighborsClassifier
-
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from lab1.pandas_1 import upload_df, replace_df_column
 from lab3.linear_regression_1 import split_and_show
 from lab4.upload_1 import get_split_data, show_scatterplot
-
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 def kNN(x, y, n_neighbors=3, weights='uniform'):
     knn = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights)
@@ -43,21 +43,32 @@ def show_accurancy(x_train, x_test, y_train, y_test):
     plt.show()
 
 
-def show_decision_boundary(x, y, knn):
+def show_decision_boundary(x, y, model):
     display = DecisionBoundaryDisplay.from_estimator(
-        knn, x, response_method='predict',
+        model, x, response_method='predict',
         xlabel='x1', ylabel='x2',
         grid_resolution=200, alpha=0.7)
     display.ax_.scatter(x[:, 0], x[:, 1], c=y, edgecolors='k')
     plt.show()
 
 
-def show_pewdicted_plot():
-    y_pred = knn.predict(x_test)
+def show_predicted_plot(model):
+    y_pred = model.predict(x_test)
     x_y_pred = x_test
     x_y_pred['Class'] = y_pred
     show_scatterplot(x_y_pred)
     print(y_pred)
+
+
+def show_confusion_matrix(x, y, model):
+    ConfusionMatrixDisplay.from_estimator(model, x, y, cmap='YlGn')
+    plt.show()
+
+def show_metrix(x, y, model):
+    y_pred = model.predict(x)
+    print("precision_score", precision_score(y,y_pred, average='binary'))
+    print("recall_score", recall_score(y,y_pred, average='binary'))
+    print("f1_score", f1_score(y,y_pred, average='binary'))
 
 
 if __name__ == '__main__':
@@ -66,3 +77,5 @@ if __name__ == '__main__':
     show_accurancy(x_train, x_test, y_train, y_test)
     knn = kNN(x_train, y_train, 10, 'distance')
     show_decision_boundary(x.to_numpy(), y.to_numpy(), knn)
+    show_confusion_matrix(x_test, y_test, knn)
+    show_metrix(x_test, y_test, knn)
